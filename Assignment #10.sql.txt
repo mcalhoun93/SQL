@@ -1,0 +1,15 @@
+CREATE PROCEDURE GRADES (IN p_stud_id INT,
+			IN p_score DEC(3,2),
+			OUT p_grade CHAR(1))
+P1: BEGIN
+	IF p_score >= .90 THEN
+		SET  p_grade = ‘A’;
+	ELSEIF p_score >= .80 THEN
+		SET   p_grade = ‘B’;
+	ELSEIF p_score >= .70 THEN
+		SET   p_grade = ‘C’;
+	ELSEIF p_score >= .60 THEN
+		SET   p_grade = ‘D’;
+	ELSE SET   p_grade = ‘F’;
+	END IF;
+END P1

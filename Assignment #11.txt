@@ -1,0 +1,16 @@
+CREATE PROCEDURE BOOK_ADD (IN p_book_code INT, IN p_booK_title CHAR(25), IN p_publisher_code CHAR(2),
+			IN p_type CHAR(3), IN p_price DEC(3,2), IN p_paperback CHAR(1), 
+			OUT p_confirmation, OUT p_date)
+P1: BEGIN
+	INSERT INTO BOOK (BOOK_CODE, BOOK_TITLE, PUBLISHER_CODE, TYPE, PRICE, PAPERBACK)
+	VALUES (p_book_code, p_booK_title, p_publisher_code, p_type. p_price, p_paperback) 
+	SET p_confirmation = 'Book Added', p_date = CURRENT DATE
+END P1
+
+CREATE PROCEDURE BOOK_INVENTORY (p_book_code INT, p_branch_num INT, p_on_hand INT
+				OUT p_confirmation)
+P1: BEGIN
+	UPDATE INVENTORY 
+	SET ON_HAND = p_on_hand + ON_HAND, p_confirmation = 'Book added to inventory'
+	WHERE p_book_code = BOOK_CODE AND p_branch_num = BRANCH_NUM
+END P1

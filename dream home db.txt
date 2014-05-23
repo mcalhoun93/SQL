@@ -1,0 +1,125 @@
+DROP TABLE DH_VIEWING;
+DROP TABLE DH_PROPERTY;
+DROP TABLE DH_STAFF;
+DROP TABLE DH_BRANCH;
+DROP TABLE DH_CLIENT;
+DROP TABLE DH_OWNER;
+
+CREATE TABLE DH_BRANCH (BRANCH_ID CHAR(5) NOT NULL, 
+                        STREET CHAR(20), 
+                        CITY CHAR(20), 
+                        POSTCODE CHAR(10),
+                        CONSTRAINT PKBRANCH PRIMARY KEY (BRANCH_ID));
+                        
+CREATE TABLE DH_CLIENT (CLIENT_ID INT NOT NULL, 
+                        FNAME CHAR(10), 
+                        LNAME CHAR(15), 
+                        PHONE INT, 
+                        STREET CHAR(35), 
+                        CITY CHAR(20),
+	                      POSTCODE CHAR(10), 
+	                      EMAIL CHAR(25), 
+	                      JOINEDON DATE, 
+	                      REGION CHAR(35), 
+	                      PREFERREDTYPE CHAR(10), 
+	                      MAX_RENT DEC(7,2),
+	                      CONSTRAINT PKCLIENT PRIMARY KEY (CLIENT_ID));
+	                      
+CREATE TABLE DH_OWNER (OWNER_ID CHAR(5) NOT NULL, 
+                       FNAME CHAR(10), 
+                       LNAME CHAR(15), 
+                       ADDRESS VARCHAR(50), 
+                       PHONE BIGINT, 
+                       EMAIL VARCHAR(50), 
+                       PASSWORD CHAR(10),
+                       CONSTRAINT PKOWNER PRIMARY KEY (OWNER_ID));	    
+                                      
+CREATE TABLE DH_STAFF (STAFF_ID CHAR(5) NOT NULL, 
+                       FNAME CHAR(10), 
+                       LNAME CHAR(10), 
+                       POSITION CHAR(10), 
+                       SEX CHAR(1), 
+                       DOB DATE,
+                       SALARY DECIMAL (8,2), 
+                       PHONE_EXT INT, 
+                       CELL_PHONE BIGINT, 
+                       EMAIL VARCHAR(50), 
+                       BRANCH_ID CHAR(5),
+                       CONSTRAINT PKSTAFF PRIMARY KEY (STAFF_ID),
+                       CONSTRAINT FKBRANCH FOREIGN KEY (BRANCH_ID) REFERENCES DH_BRANCH);
+                       
+CREATE TABLE DH_PROPERTY (PROPERTY_ID CHAR(5) NOT NULL, 
+                          STREET CHAR(20), 
+                          CITY CHAR(20), 
+                          POSTCODE CHAR(10), 
+                          TYPE CHAR(10),
+                          ROOMS INT, 
+                          RENT INT, 
+                          OWNER_ID CHAR(5), 
+                          STAFF_ID CHAR(5), 
+                          CONSTRAINT PKPROPERTY PRIMARY KEY (PROPERTY_ID),
+                          CONSTRAINT FKOWNER FOREIGN KEY (OWNER_ID) REFERENCES DH_OWNER,
+                          CONSTRAINT FKSTAFF FOREIGN KEY (STAFF_ID) REFERENCES DH_STAFF);
+                          
+CREATE TABLE DH_VIEWING (VIEWING_ID INT NOT NULL, 
+                         VIEWDATE DATE, 
+                         VIEWTIME TIME, 
+                         COMMENT VARCHAR(200), 
+                         WISH_TO_RENT CHAR(1),
+                         CLIENT_ID INT, 
+                         PROPERTY_ID CHAR(5), 
+                         CONSTRAINT PKVIEWING PRIMARY KEY (VIEWING_ID),
+                         CONSTRAINT FKPROPERTY FOREIGN KEY (PROPERTY_ID) REFERENCES DH_PROPERTY);
+
+INSERT INTO DH_BRANCH VALUES('B002','56 Cover Drive','London','NW10 6EU');                                            
+INSERT INTO DH_BRANCH VALUES('B003','163 Main Street','Glasgow','G11 9QX');  
+INSERT INTO DH_BRANCH VALUES('B004','32 Manse Road','Bristol','BS99 1NZ');   
+INSERT INTO DH_BRANCH VALUES('B005','22 Deer Road','London','SW1 4EH');      
+INSERT INTO DH_BRANCH VALUES('B007','16 Argyll Street','Aberdeen','AB2 3SU');   
+
+INSERT INTO DH_CLIENT VALUES(2, 'Fred','Flintstone',5551234,'12 Rock Way','Bedrock','BD3 8RK','fred@flintyrock.com','2004-05-09',null,'House',450.00);
+INSERT INTO DH_CLIENT VALUES(6, 'Wilma','Flintstone',5551234,'12 Rock Way','Bedrock','BD3 8RK','wilma@flintyrock.com','2004-05-09',null,'Flat',350.00);
+INSERT INTO DH_CLIENT VALUES(7, 'Albert','Johnstone',5556677,'1 Way St.','Chicago','PO34 5FB','albie@johnstone.com','2004-05-09','(N/A)','Flat',450.00);
+INSERT INTO DH_CLIENT VALUES(9, 'Clark','Kent',5559999,'1 Super Way','Smallville','SM4 2ME','clark@supersite.com','2004-05-09','(N/A)','Flat',400.00);
+INSERT INTO DH_CLIENT VALUES(10,'Joe','Bloggs',1234567,'5 High St','Paisley','PA2 2BB','joe@paisley.com','2004-05-10','London (North West)','House',450.00);
+INSERT INTO DH_CLIENT VALUES(12,'Edward','Scissorhands',1234567,'1 Snip St.','Scissorland','SC1 2XX','eddie@scix.com','2004-05-21','(N/A)','House',300.00);
+INSERT INTO DH_CLIENT VALUES(17,'Albert','Enistein',5556789,'12 Long Island Way','New Jersey','NJ44 2RD','bert@nuclearintent.com','2004-05-21','London (North West)',null,450.00);
+INSERT INTO DH_CLIENT VALUES(18,'Snorrie','Sturrluson',3334567,'1 Vik Way','Rekjavik','RK22 3RD','snorrie@iceland.com','2004-05-21','(N/A)',null,400.00);
+INSERT INTO DH_CLIENT VALUES(19,'Ferdinand','Oblogiotta',1235555,'12 Strumpetwise Street','Lagrange Orage','PP2 1BB','ferdy@orage.com','2004-05-31','(N/A)','House',450.00);
+INSERT INTO DH_CLIENT VALUES(20,'Joe','Schmoe',12345678,'1 High St','Largs','KA30 9DD','joes@largy.com','2004-05-31','(N/A)','House',550.00);
+INSERT INTO DH_CLIENT VALUES(21,'Bill','Gates',1235555,'1 Rich Street','Seattle','SE2 TTL','bill@gatesland.com','2004-06-01','London (South)','House',1000.00);
+INSERT INTO DH_CLIENT VALUES(24,'Bruce','Wayne',5556789,'1 Wayne Manor','Gotham','BA01 TT0','wayne@batty.com','2004-11-22','Glasgow','House',900.00);
+
+INSERT INTO DH_OWNER VALUES('CO46', 'Joe','Keough','2 Fergus Drive, Aberdeen, AB2 7SX',01224861212, 'jkeough@lhh.com','sixstars');
+INSERT INTO DH_OWNER VALUES('CO87', 'Carol','Ferrel', '6 Achray St., Glasgow G32 9DX',01413577419, 'cfarrel@gmail.com','topsecret');
+INSERT INTO DH_OWNER VALUES('CO40', 'Tina','Murphy','63 Well St., Glasgow G42',01419431728, 'tinam@hotmail.com','sunshine');
+INSERT INTO DH_OWNER VALUES('CO93', 'Tony','Shaw','12 Park Pl., Glasgow G40QR',01412257025, 'tony.shaw@ark.com','sportsfan');
+
+INSERT INTO DH_STAFF (STAFF_ID, FNAME, LNAME, POSITION, SEX, DOB, SALARY, BRANCH_ID, PHONE_EXT, CELL_PHONE, EMAIL) VALUES('SA9','Mary','Howe','Assistant','F','1970-02-19',9000,'B007',1338,7955512345,'MaryHowe@Dreamhome.co.uk');
+INSERT INTO DH_STAFF (STAFF_ID, FNAME, LNAME, POSITION, SEX, DOB, SALARY, BRANCH_ID, PHONE_EXT, CELL_PHONE, EMAIL) VALUES('SG14','David','Ford','Supervisor','M','1958-03-24',18000,'B003',0223,7955512344,'DavidFord@Dreamhome.co.uk');
+INSERT INTO DH_STAFF (STAFF_ID, FNAME, LNAME, POSITION, SEX, DOB, SALARY, BRANCH_ID, PHONE_EXT, CELL_PHONE, EMAIL) VALUES('SG37','Ann','Beech','Assistant','F','1960-11-10',12000,'B003',0224,7955512346,'AnnBeech@Dreamhome.co.uk');
+INSERT INTO DH_STAFF (STAFF_ID, FNAME, LNAME, POSITION, SEX, DOB, SALARY, BRANCH_ID, PHONE_EXT, CELL_PHONE, EMAIL) VALUES('SG5','Susan','Brand','Manager','F','1940-06-03',24000,'B003',0225,7955512347,'SusanBrand@Dreamhome.co.uk');
+INSERT INTO DH_STAFF (STAFF_ID, FNAME, LNAME, POSITION, SEX, DOB, SALARY, BRANCH_ID, PHONE_EXT, CELL_PHONE, EMAIL) VALUES('SL21','John','White','Manager','M','1945-10-01',30000,'B005',1512,9055512345,'JohnWhite@Dreamhome.co.uk');
+INSERT INTO DH_STAFF (STAFF_ID, FNAME, LNAME, POSITION, SEX, DOB, SALARY, BRANCH_ID, PHONE_EXT, CELL_PHONE, EMAIL) VALUES('SL41','Julie','Lee','Assistant','F','1965-06-13',9000,'B005',1514,9055512346,'JulieLee@Dreamhome.co.uk');
+
+INSERT INTO DH_PROPERTY VALUES ('PA14','16 Holhead','Aberdeen','AB7 5SU','House',6,650,'CO46','SA9');    
+INSERT INTO DH_PROPERTY VALUES ('PG16','5 Novar Drive','Glasgow','G12 9AX','Flat',4,450,'CO93','SG14');  
+INSERT INTO DH_PROPERTY VALUES ('PG21','18 Dale Road','Glasgow','G12','House',5,600,'CO87','SG37');      
+INSERT INTO DH_PROPERTY VALUES ('PG36','2 Manor Road','Glasgow','G32 4QX','Flat',3,375,'CO93','SG37');   
+INSERT INTO DH_PROPERTY VALUES ('PG4','6 Lawrence Street','Glasgow','G11 9QX','Flat',3,350,'CO40','SA9');
+INSERT INTO DH_PROPERTY VALUES ('PG97','Muir Drive','Aberdeen','AB42 1DD','House',3,380,'CO46','SA9');   
+INSERT INTO DH_PROPERTY VALUES ('PL94','6 Argyll Street','London','NW2','Flat',4,400,'CO87','SL41');
+
+INSERT INTO DH_VIEWING (VIEWING_ID, CLIENT_ID, PROPERTY_ID, VIEWDATE, VIEWTIME, COMMENT, WISH_TO_RENT) VALUES(2,2,'PA14','2004-07-01','11:00 AM',NULL,NULL);
+INSERT INTO DH_VIEWING (VIEWING_ID, CLIENT_ID, PROPERTY_ID, VIEWDATE, VIEWTIME, COMMENT, WISH_TO_RENT) VALUES(3,7,'PG36','2004-07-01','12:00 AM',NULL,NULL);
+INSERT INTO DH_VIEWING (VIEWING_ID, CLIENT_ID, PROPERTY_ID, VIEWDATE, VIEWTIME, COMMENT, WISH_TO_RENT) VALUES(4,9,'PG4','2004-07-01','12:00 AM','Tidy but too small',NULL);
+INSERT INTO DH_VIEWING (VIEWING_ID, CLIENT_ID, PROPERTY_ID, VIEWDATE, VIEWTIME, COMMENT, WISH_TO_RENT) VALUES(5,10,'PA14','2004-07-02','10:00 AM',NULL,NULL);
+INSERT INTO DH_VIEWING (VIEWING_ID, CLIENT_ID, PROPERTY_ID, VIEWDATE, VIEWTIME, COMMENT, WISH_TO_RENT) VALUES(6,12,'PG4','2004-07-02','2:00 PM',NULL,NULL);
+INSERT INTO DH_VIEWING (VIEWING_ID, CLIENT_ID, PROPERTY_ID, VIEWDATE, VIEWTIME, COMMENT, WISH_TO_RENT) VALUES(7,6,'PA14','2004-07-20','12:00 AM',NULL,NULL);
+INSERT INTO DH_VIEWING (VIEWING_ID, CLIENT_ID, PROPERTY_ID, VIEWDATE, VIEWTIME, COMMENT, WISH_TO_RENT) VALUES(8,6,'PG21','2004-07-21','1:00 PM',NULL,NULL);
+INSERT INTO DH_VIEWING (VIEWING_ID, CLIENT_ID, PROPERTY_ID, VIEWDATE, VIEWTIME, COMMENT, WISH_TO_RENT) VALUES(11,6,'PA14','2004-07-20','12:00 AM',NULL,NULL);
+INSERT INTO DH_VIEWING (VIEWING_ID, CLIENT_ID, PROPERTY_ID, VIEWDATE, VIEWTIME, COMMENT, WISH_TO_RENT) VALUES(12,9,'PG21','2004-11-22','9:00 AM','Not bad at all.',NULL);
+INSERT INTO DH_VIEWING (VIEWING_ID, CLIENT_ID, PROPERTY_ID, VIEWDATE, VIEWTIME, COMMENT, WISH_TO_RENT) VALUES(13,9,'PG36','2004-11-23','9:00 AM','Kitchen too small.',NULL);
+INSERT INTO DH_VIEWING (VIEWING_ID, CLIENT_ID, PROPERTY_ID, VIEWDATE, VIEWTIME, COMMENT, WISH_TO_RENT) VALUES(14,9,'PG16','2004-11-23','9:00 AM',NULL,NULL);
+INSERT INTO DH_VIEWING (VIEWING_ID, CLIENT_ID, PROPERTY_ID, VIEWDATE, VIEWTIME, COMMENT, WISH_TO_RENT) VALUES(15,24,'PG21','2004-11-25','11:00 AM',NULL,NULL);
+     
